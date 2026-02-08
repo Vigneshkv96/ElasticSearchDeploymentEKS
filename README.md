@@ -62,3 +62,7 @@ Check Pod logs: kubectl logs -f statefulset/elasticsearch
 Restart Pods: kubectl rollout restart statefulset elasticsearch
 
 Check Environment Variables: kubectl exec -it elasticsearch-0 -- env | grep xpack
+
+
+for more info check my youtube channel
+https://youtu.be/ZSqzlTYZhzE
