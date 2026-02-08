@@ -1,56 +1,54 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: elasticsearch
+  name: kibana
+  labels:
+    app: kibana
 spec:
-  serviceName: "elasticsearch"
   replicas: 1
   selector:
     matchLabels:
-      app: elasticsearch
+      app: kibana
   template:
     metadata:
       labels:
-        app: elasticsearch
+        app: kibana
     spec:
       containers:
-      - name: elasticsearch
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+      - name: kibana
+        image: docker.elastic.co/kibana/kibana:7.17.0
         ports:
-        - containerPort: 9200
-          name: rest
+        - containerPort: 5601
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
         env:
-        - name: discovery.type
-          value: single-node
-        - name: ELASTIC_USERNAME
+        - name: ELASTICSEARCH_HOSTS
+          value: "http://elasticsearch-svc:9200"
+        - name: ELASTICSEARCH_USERNAME
           valueFrom:
             secretKeyRef:
               name: elastic-auth
               key: username
-        - name: ELASTIC_PASSWORD
+        - name: ELASTICSEARCH_PASSWORD
           valueFrom:
             secretKeyRef:
               name: elastic-auth
               key: password
-        - name: xpack.security.enabled
-          value: "true" #
-        resources:
-          limits:
-            cpu: "1000m"
-            memory: "2Gi"
-          requests:
-            cpu: "500m"
-            memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: elasticsearch-svc
+  name: kibana-svc
 spec:
   selector:
-    app: elasticsearch
+    app: kibana
   ports:
     - protocol: TCP
-      port: 9200
-      targetPort: 9200
-  type: LoadBalancer # This creates your Public IP!
+      port: 5601
+      targetPort: 5601
+  type: LoadBalancer
