@@ -1,5 +1,5 @@
 Elasticsearch on Google Kubernetes Engine (GKE)
-This project migrates a local Elasticsearch setup from VirtualBox to a managed GKE Autopilot environment for better networking stability and scalability.
+This project explains Elasticsearch setup in  managed GKE Autopilot environment for better networking stability and scalability.
 
 🚀 1. Cluster Setup
 First, we initialize the GKE Autopilot cluster. This removes the need to manage individual VM nodes or networking bridges.
